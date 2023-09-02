@@ -46,8 +46,6 @@ namespace EmployeeTask.CQRS.Commands
             emp.EmailHome = request.EmailHome;
             emp.Mobile = request.Mobile;
 
-
-            _dbContext.Employees.Update(emp);
             await _dbContext.SaveChangesAsync();
             return true;
         }
