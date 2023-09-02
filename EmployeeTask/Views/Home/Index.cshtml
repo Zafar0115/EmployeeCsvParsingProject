@@ -1,0 +1,217 @@
+﻿@model  List<Employee>;
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container container-fluid">
+
+    <div>
+        <form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <hr />
+            <button class="btn btn-outline-success" type="submit">Upload</button>
+        </form>
+    </div>    
+
+
+    <form asp-controller="Home" asp-action="Filter" method="post">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                            <input type="text" name="search" class="form-control" placeholder="Search..." />
+                            <button class="btn btn-primary" type="submit">Search</button>
+                                <select class="form-select" name="sortingOrder">
+                                 <option value="asc">Asc</option>
+                                 <option value="desc">Desc</option>
+                                </select>                            
+                            <button class="btn btn-primary" type="submit">Sort</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Payroll number</th>
+                    <th>Forenames</th>
+                    <th class="sortable">Surname</th>
+                    <th>Birthdate</th>
+                    <th>Telephone</th>
+                    <th>Mobile</th>
+                    <th>Address1</th>
+                    <th>Address2</th>
+                    <th>Postcode</th>
+                    <th>Email</th>
+                    <th>StartDate</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count>0)
+                {
+                    @foreach (Employee emp in Model)
+                    {
+                        <tr>
+                            <td>@emp.PayyrollNumber</td>
+                            <td>@emp.Forename</td>
+                            <td>@emp.Surname</td>
+                            <td>@emp.DateOfBirth</td>
+                            <td>@emp.Telephone</td>
+                            <td>@emp.Mobile</td>
+                            <td>@emp.Address</td>
+                            <td>@emp.Address2</td>
+                            <td>@emp.Postcode</td>
+                            <td>@emp.EmailHome</td>
+                            <td>@emp.StartDate</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@emp.PayyrollNumber">Edit</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#removeModal" data-remove="@emp.PayyrollNumber">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+</div>
+
+
+    <!--Update Modal dialog-->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/Home/Edit" method="post">
+                        <div class="mb-3">
+                            <label for="PayyrollNumber" class="col-form-label">Payroll:</label>
+                            <input type="text"  name="PayyrollNumber" class="form-control" id="recipient-name" placeholder="***">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Forename" class="col-form-label">Forename:</label>
+                            <input type="text" name="Forename" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Surname" class="col-form-label">Surname:</label>
+                            <input type="text" name="Surname" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="DateOfBirth" class="col-form-label">DateOfBirth:</label>
+                            <input type="date" name="DateOfBirth" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Telephone" class="col-form-label">Telephone:</label>
+                            <input type="number" name="Telephone" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Mobile" class="col-form-label">Mobile:</label>
+                            <input type="number" name="Mobile" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Address" class="col-form-label">Password:</label>
+                            <input type="text" name="Address" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Address2" class="col-form-label">Address2:</label>
+                            <input type="text" name="Address2" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Postcode" class="col-form-label">Postcode:</label>
+                            <input type="number" name="Postcode" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="EmailHome" class="col-form-label">EmailHome:</label>
+                            <input type="email" name="EmailHome" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="StartDate" class="col-form-label">StartDate:</label>
+                            <input type="date" name="StartDate" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--Delete Modal dialog-->
+<div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/Home/Delete" method="post">
+                    <div class="mb-3">
+                        <label for="PayyrollNumber" class="col-form-label">PayyrollNumber:</label>
+                        <input type="text" name="PayyrollNumber" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancelremove" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes remove it!</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        var exampleModal = document.getElementById('updateModal')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+
+            var button = event.relatedTarget
+
+            var recipient = button.getAttribute('data-bs-whatever')
+
+            var modalTitle = exampleModal.querySelector('.modal-title')
+            var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            modalTitle.textContent = 'Edit for employee ' + recipient
+            modalBodyInput.value = recipient
+        })
+
+
+        var removeModal = document.getElementById('removeModal')
+        removeModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-remove')
+
+            var modalTitle = removeModal.querySelector('.modal-title')
+
+            var modalBodyInput = removeModal.querySelector('.modal-body input')
+
+            modalTitle.textContent = 'Remove employee ' + recipient
+            modalBodyInput.value = recipient
+
+        })
+
+        function hideRow(rowId) {
+            var row = document.getElementById(rowId);
+            row.style.display = "none";
+            const btn = document.getElementById("cancelremove");
+            btn.addEventListener("click", function () {
+                row.style.display = "table-row";
+            });
+        </script>
+}
+
